@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}АТЛАС АВТО — автомобили с характером{% endblock %}</title>
+  <meta name="description" content="{% block description %}Новые автомобили в наличии: тест-драйв, бронирование онлайн и оценка вашего авто в трейд-ин.{% endblock %}">
+  <link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <script src="{% static 'js/main.js' %}" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Перейти к содержанию</a>
+
+  <header class="site-header" data-nav>
+    <div class="container site-header__bar">
+      <a class="logo" href="{% url 'autosalon:home' %}" aria-label="АТЛАС АВТО — на главную">
+        <span class="logo__main">АТЛАС</span>
+        <span class="logo__sub">АВТО</span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
+        <span class="visually-hidden">Открыть меню</span>
+        <span class="nav-toggle__icon" aria-hidden="true">
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+        </span>
+      </button>
+
+      <nav class="main-nav" id="primary-nav" aria-label="Основная навигация">
+        <ul class="main-nav__list">
+          <li>
+            <a class="main-nav__link" href="{% url 'autosalon:catalog' %}"
+               {% if request.resolver_match.url_name == 'catalog' %}aria-current="page"{% endif %}>Каталог</a>
+          </li>
+          <li>
+            <a class="main-nav__link" href="{% url 'autosalon:test_drive' %}"
+               {% if request.resolver_match.url_name == 'test_drive' %}aria-current="page"{% endif %}>Тест-драйв</a>
+          </li>
+          <li>
+            <a class="main-nav__link" href="{% url 'autosalon:trade_in' %}"
+               {% if request.resolver_match.url_name == 'trade_in' %}aria-current="page"{% endif %}>Трейд-ин</a>
+          </li>
+          <li>
+            <a class="main-nav__link" href="{% url 'autosalon:about' %}"
+               {% if request.resolver_match.url_name == 'about' %}aria-current="page"{% endif %}>О нас</a>
+          </li>
+          <li>
+            <a class="main-nav__link" href="{% url 'autosalon:contacts' %}"
+               {% if request.resolver_match.url_name == 'contacts' %}aria-current="page"{% endif %}>Контакты</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="header-side">
+        <div class="header-side__contacts">
+          <a class="header-side__phone" href="tel:+74950000000">+7 (495) 000-00-00</a>
+          <span class="header-side__hours">Ежедневно, 09:00–21:00</span>
+        </div>
+        <a class="btn btn--outline header-side__cta" href="{% url 'autosalon:register' %}">Регистрация</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__top">
+      <div class="site-footer__brand">
+        <a class="logo logo--footer" href="{% url 'autosalon:home' %}" aria-label="АТЛАС АВТО — на главную">
+          <span class="logo__main">АТЛАС</span>
+          <span class="logo__sub">АВТО</span>
+        </a>
+        <p class="site-footer__tagline">Ваш путь к новому автомобилю начинается со знакомства.</p>
+      </div>
+
+      <nav class="site-footer__nav" aria-label="Каталог">
+        <h2 class="site-footer__title">Каталог</h2>
+        <ul class="site-footer__list">
+          <li><a href="{% url 'autosalon:catalog' %}">Все автомобили</a></li>
+          <li><a href="{% url 'autosalon:about' %}">О нас</a></li>
+        </ul>
+      </nav>
+
+      <nav class="site-footer__nav" aria-label="Сервисы">
+        <h2 class="site-footer__title">Сервисы</h2>
+        <ul class="site-footer__list">
+          <li><a href="{% url 'autosalon:test_drive' %}">Тест-драйв</a></li>
+          <li><a href="{% url 'autosalon:contacts' %}">Контакты</a></li>
+        </ul>
+      </nav>
+
+      <div class="site-footer__contacts">
+        <h2 class="site-footer__title">Связаться</h2>
+        <a class="site-footer__phone" href="tel:+74950000000">+7 (495) 000-00-00</a>
+        <span class="site-footer__hours">Ежедневно, 09:00–21:00</span>
+      </div>
+    </div>
+
+    <div class="container site-footer__bottom">
+      <p class="site-footer__copyright">© 2026 АТЛАС АВТО</p>
+      <p class="site-footer__disclaimer">Модели и цены приведены для примера. Наличие и условия уточняйте у менеджера.</p>
+      <a class="site-footer__policy" href="{% url 'autosalon:privacy' %}">Политика конфиденциальности</a>
+      <p class="site-footer__offer">Информация не является публичной офертой.</p>
+    </div>
+  </footer>
+</body>
+</html>

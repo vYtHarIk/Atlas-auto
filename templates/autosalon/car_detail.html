@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static humanize %}
+
+{% block title %}{{ page_title }}{% endblock %}
+{% block description %}{{ car.name }}: {{ car.specs }}, {{ car.condition }}. Цена {{ car.price|intcomma }} ₽.{% endblock %}
+
+{% block content %}
+  <section class="page-stub" aria-labelledby="car-title">
+    <div class="container page-stub__inner">
+      <p class="kicker">{{ car.status }}</p>
+      <h1 class="page-stub__title" id="car-title">{{ car.name }}</h1>
+      <p class="page-stub__lead">{{ car.specs }}. {{ car.condition }}. {{ car.price|intcomma }} ₽.</p>
+
+      <img class="page-stub__image"
+           src="{% static car.image %}"
+           alt="{{ car.image_alt }}"
+           width="800" height="400">
+
+      <p class="page-stub__note">Подробная карточка автомобиля с комплектацией появится на занятии 8.</p>
+
+      <div class="page-stub__actions">
+        <a class="btn btn--primary" href="{% url 'autosalon:test_drive' %}">Записаться на тест-драйв</a>
+        <a class="btn btn--outline" href="{% url 'autosalon:catalog' %}">Вернуться в каталог</a>
+      </div>
+    </div>
+  </section>
+{% endblock %}

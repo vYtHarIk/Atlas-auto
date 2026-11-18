@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+  <section class="page-stub" aria-labelledby="page-stub-title">
+    <div class="container page-stub__inner">
+      <p class="kicker">АТЛАС АВТО</p>
+      <h1 class="page-stub__title" id="page-stub-title">{{ section_title }}</h1>
+      <p class="page-stub__lead">{{ section_lead }}</p>
+      <p class="page-stub__note">{{ section_note }}</p>
+      <a class="btn btn--dark" href="{% url 'autosalon:home' %}">На главную</a>
+    </div>
+  </section>
+{% endblock %}
