@@ -1,24 +1,21 @@
 # Виртуальное окружение
-.venv/
 venv/
-env/
+.venv/
+ENV/
 
-# Python
+# База данных разработки
+db.sqlite3
+
+# Кэш Python
 __pycache__/
 *.py[cod]
-*.egg-info/
+*$py.class
 
-# Локальная база и секреты
-db.sqlite3
+# Настройки среды и медиафайлы
 .env
-
-# Пользовательские файлы и собранная статика
 media/
 staticfiles/
 
-# Редакторы и ОС
-.vscode/
-.idea/
+# Системные файлы ОС
+.DS_Store
 Thumbs.db
-Desktop.ini
-*.log
