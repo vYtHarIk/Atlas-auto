@@ -1,0 +1,24 @@
+# Виртуальное окружение
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Локальная база и секреты
+db.sqlite3
+.env
+
+# Пользовательские файлы и собранная статика
+media/
+staticfiles/
+
+# Редакторы и ОС
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini
+*.log
