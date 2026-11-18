@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 700" width="1600" height="700" role="img" aria-label="Porsche Cayenne в ночном шоуруме">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0.35" y2="1">
+      <stop offset="0" stop-color="#0B1726"/>
+      <stop offset="0.55" stop-color="#060D17"/>
+      <stop offset="1" stop-color="#04080F"/>
+    </linearGradient>
+    <radialGradient id="beam" cx="0.68" cy="0.32" r="0.55">
+      <stop offset="0" stop-color="#3D5673" stop-opacity="0.55"/>
+      <stop offset="0.6" stop-color="#16283D" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#06101C" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#98A1AC"/>
+      <stop offset="0.45" stop-color="#5A636E"/>
+      <stop offset="1" stop-color="#2A323B"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#16283A"/>
+      <stop offset="1" stop-color="#4C5C6C"/>
+    </linearGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0D1826" stop-opacity="0"/>
+      <stop offset="1" stop-color="#16263A" stop-opacity="0.85"/>
+    </linearGradient>
+    <radialGradient id="headlight">
+      <stop offset="0" stop-color="#FFF6D8" stop-opacity="0.95"/>
+      <stop offset="0.35" stop-color="#FFE9A8" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#FFE9A8" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="arches">
+      <rect width="800" height="400" fill="#fff"/>
+      <circle cx="205" cy="330" r="71" fill="#000"/>
+      <circle cx="585" cy="330" r="71" fill="#000"/>
+    </mask>
+  </defs>
+
+  <rect width="1600" height="700" fill="url(#sky)"/>
+  <rect width="1600" height="700" fill="url(#beam)"/>
+
+  <g opacity="0.5">
+    <rect x="1000" y="70" width="14" height="440" fill="#8FA7C2" opacity="0.07"/>
+    <rect x="1190" y="40" width="42" height="470" fill="#8FA7C2" opacity="0.05"/>
+    <rect x="1460" y="70" width="16" height="440" fill="#8FA7C2" opacity="0.07"/>
+    <rect x="910" y="140" width="640" height="1" fill="#8FA7C2" opacity="0.10"/>
+  </g>
+
+  <rect y="470" width="1600" height="230" fill="url(#floor)"/>
+  <ellipse cx="1080" cy="600" rx="470" ry="34" fill="#8FA7C2" opacity="0.06"/>
+
+  <g transform="translate(500 18) scale(1.5)">
+    <ellipse cx="400" cy="398" rx="300" ry="12" fill="#000000" opacity="0.55"/>
+    <g mask="url(#arches)">
+      <path d="M 96 330 C 96 306 104 292 122 288 L 250 274 C 268 232 300 208 350 200 L 505 198 C 555 202 588 224 612 262 L 680 278 C 700 283 712 296 714 316 L 713 336 C 712 346 706 350 696 350 L 116 350 C 102 350 96 342 96 330 Z" fill="url(#body)" stroke="#171E26" stroke-width="2"/>
+    </g>
+    <path d="M 260 272 L 318 220 C 333 208 352 203 375 202 L 372 272 Z" fill="url(#glass)"/><path d="M 386 202 L 500 201 C 535 205 560 226 580 272 L 386 272 Z" fill="url(#glass)"/><path d="M 386 205 L 498 204 C 530 208 552 226 568 264 L 386 264 Z" fill="#ffffff" opacity="0.12"/>
+    <path d="M 380 276 L 380 344" stroke="#000000" stroke-width="1.6" opacity="0.22"/><path d="M 590 278 L 590 344" stroke="#000000" stroke-width="1.6" opacity="0.16"/><rect x="310" y="294" width="30" height="5" rx="2.5" fill="#000000" opacity="0.35"/><rect x="508" y="294" width="30" height="5" rx="2.5" fill="#000000" opacity="0.35"/><path d="M 300 194 L 502 192" stroke="#000000" stroke-width="3" opacity="0.18" stroke-linecap="round"/><rect x="100" y="292" width="17" height="11" rx="3" fill="#A63A3A"/><path d="M 690 288 L 710 292 L 710 304 L 690 299 Z" fill="#FFF3CF"/><path d="M 254 274 C 272 240 302 216 348 206" stroke="#ffffff" stroke-width="1.6" fill="none" opacity="0.32"/>
+    <ellipse cx="706" cy="296" rx="90" ry="46" fill="url(#headlight)"/>
+    
+    <circle cx="205" cy="330" r="58" fill="#14171b"/>
+    <circle cx="205" cy="330" r="53" fill="#262b32"/>
+    <circle cx="205" cy="330" r="45" fill="#B9BFC5"/>
+    <circle cx="205" cy="330" r="38" fill="#7F878F"/>
+    <line x1="205.0" y1="320.0" x2="205.0" y2="294.0" stroke="#E4E8EB" stroke-width="4" stroke-linecap="round"/><line x1="214.5" y1="326.9" x2="239.2" y2="318.9" stroke="#E4E8EB" stroke-width="4" stroke-linecap="round"/><line x1="210.9" y1="338.1" x2="226.2" y2="359.1" stroke="#E4E8EB" stroke-width="4" stroke-linecap="round"/><line x1="199.1" y1="338.1" x2="183.8" y2="359.1" stroke="#E4E8EB" stroke-width="4" stroke-linecap="round"/><line x1="195.5" y1="326.9" x2="170.8" y2="318.9" stroke="#E4E8EB" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="205" cy="330" r="8" fill="#4A5158"/>
+    <circle cx="205" cy="330" r="49" fill="none" stroke="#E9ECEF" stroke-width="1.5" opacity="0.55"/>
+    
+    <circle cx="585" cy="330" r="58" fill="#14171b"/>
+    <circle cx="585" cy="330" r="53" fill="#262b32"/>
+    <circle cx="585" cy="330" r="45" fill="#B9BFC5"/>
+    <circle cx="585" cy="330" r="38" fill="#7F878F"/>
+    <line x1="585.0" y1="320.0" x2="585.0" y2="294.0" stroke="#E4E8EB" stroke-width="4" stroke-linecap="round"/><line x1="594.5" y1="326.9" x2="619.2" y2="318.9" stroke="#E4E8EB" stroke-width="4" stroke-linecap="round"/><line x1="590.9" y1="338.1" x2="606.2" y2="359.1" stroke="#E4E8EB" stroke-width="4" stroke-linecap="round"/><line x1="579.1" y1="338.1" x2="563.8" y2="359.1" stroke="#E4E8EB" stroke-width="4" stroke-linecap="round"/><line x1="575.5" y1="326.9" x2="550.8" y2="318.9" stroke="#E4E8EB" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="585" cy="330" r="8" fill="#4A5158"/>
+    <circle cx="585" cy="330" r="49" fill="none" stroke="#E9ECEF" stroke-width="1.5" opacity="0.55"/>
+    
+  </g>
+
+  <ellipse cx="1120" cy="606" rx="380" ry="18" fill="#8FA7C2" opacity="0.10"/>
+</svg>
