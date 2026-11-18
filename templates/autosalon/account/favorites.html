@@ -1,0 +1,24 @@
+{% extends "autosalon/account/base_account.html" %}
+
+{% block title %}Избранное — АТЛАС АВТО{% endblock %}
+
+{% block account_content %}
+  <header class="account-head">
+    <p class="kicker">Личный кабинет</p>
+    <h1 class="account-head__title" id="account-title">Избранное</h1>
+    <p class="account-head__lead">Автомобили, которые вы отметили. Сравнивайте и возвращайтесь к ним позже.</p>
+  </header>
+
+  {% if favorites %}
+    <ul class="car-grid car-grid--account">
+      {% for favorite in favorites %}
+        <li>{% include "includes/car_card.html" with config=favorite.configuration %}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="panel">
+      <p class="panel__empty">В избранном пока пусто. Нажмите ♥ на карточке автомобиля.</p>
+      <a class="btn btn--primary" href="{% url 'autosalon:catalog' %}">Открыть каталог</a>
+    </div>
+  {% endif %}
+{% endblock %}

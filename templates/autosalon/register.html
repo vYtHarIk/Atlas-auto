@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Регистрация — АТЛАС АВТО{% endblock %}
+{% block description %}Создайте аккаунт АТЛАС АВТО: записывайтесь на тест-драйв, бронируйте автомобили и оценивайте свой автомобиль в трейд-ин.{% endblock %}
+
+{% block content %}
+  <section class="auth-page" aria-labelledby="register-title">
+    <div class="container auth-page__inner">
+      <div class="auth-card auth-card--wide">
+        <p class="kicker">Личный кабинет</p>
+        <h1 class="auth-card__title" id="register-title">Регистрация</h1>
+        <p class="auth-card__lead">
+          Создайте аккаунт, чтобы записываться на тест-драйв, бронировать
+          автомобили и следить за заявками.
+        </p>
+
+        <form class="auth-form" method="post" data-validate>
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+            <div class="form-errors" role="alert">{{ form.non_field_errors }}</div>
+          {% endif %}
+
+          <div class="auth-form__grid">
+            {% include "includes/field.html" with field=form.first_name %}
+            {% include "includes/field.html" with field=form.last_name %}
+          </div>
+          {% include "includes/field.html" with field=form.email %}
+          {% include "includes/field.html" with field=form.phone %}
+          <div class="auth-form__grid">
+            {% include "includes/field.html" with field=form.password1 %}
+            {% include "includes/field.html" with field=form.password2 %}
+          </div>
+          {% include "includes/field.html" with field=form.consent %}
+
+          <button class="btn btn--primary btn--block" type="submit">Создать аккаунт</button>
+        </form>
+
+        <p class="auth-card__switch">
+          Уже есть аккаунт? <a href="{% url 'autosalon:login' %}">Войти</a>
+        </p>
+      </div>
+
+      <aside class="auth-aside" aria-label="Что даёт регистрация">
+        <h2 class="auth-aside__title">Что даёт аккаунт</h2>
+        <ul class="auth-aside__list">
+          <li>Онлайн-запись на тест-драйв.</li>
+          <li>Бронирование конкретного автомобиля по VIN.</li>
+          <li>Предварительная оценка в трейд-ин.</li>
+          <li>История заявок и избранное.</li>
+        </ul>
+        <p class="auth-aside__note">
+          Телефон нужен менеджеру, чтобы подтвердить запись. Данные не
+          передаются третьим лицам.
+        </p>
+      </aside>
+    </div>
+  </section>
+{% endblock %}

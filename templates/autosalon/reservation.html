@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static humanize %}
+
+{% block title %}Бронирование {{ config.model.title }} — АТЛАС АВТО{% endblock %}
+{% block description %}Забронируйте {{ config.model.title }} {{ config.name }} онлайн. Задаток от 50 000 ₽, бронь действует пять дней.{% endblock %}
+
+{% block content %}
+  <section class="form-page" aria-labelledby="reservation-title">
+    <img class="form-page__bg" src="{% static 'img/hero-cayenne.png' %}" alt="" width="1600" height="900" aria-hidden="true">
+    <div class="container form-page__inner">
+      <div class="form-card">
+        <h1 class="form-card__title" id="reservation-title">Бронирование автомобиля</h1>
+
+        <div class="form-card__summary">
+          <p><span>Автомобиль:</span> <strong>{{ config.model.title }}</strong></p>
+          <p><span>Комплектация:</span> {{ config.name }} · {{ config.get_transmission_display }} · {{ config.power_hp }} л. с.</p>
+          <p><span>VIN:</span> <strong class="spec-list__vin">{{ car.vin }}</strong></p>
+          <p><span>Цвет:</span> {{ car.color }} · {{ car.year }}</p>
+          <p class="form-card__price">{{ car.final_price|floatformat:0|intcomma }} ₽</p>
+        </div>
+
+        <form class="form-card__form" method="post" data-validate>
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+            <div class="form-errors" role="alert">{{ form.non_field_errors }}</div>
+          {% endif %}
+
+          {% include "includes/field.html" with field=form.deposit_amount %}
+          {% include "includes/field.html" with field=form.payment_method %}
+          {% include "includes/field.html" with field=form.agreement %}
+
+          <div class="form-card__actions">
+            <button class="btn btn--primary" type="submit">Забронировать</button>
+            <a class="link-muted1" href="{{ config.get_absolute_url }}">Отмена</a>
+          </div>
+
+          <p class="form-card__note">
+            Бронь действует 5 дней. Оплата задатка на учебном проекте
+            демонстрационная: бронь и сумма фиксируются в личном кабинете сразу.
+          </p>
+        </form>
+      </div>
+    </div>
+  </section>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% if field.widget_type == "checkbox" %}
+  <div class="form-field form-field--check{% if field.errors %} has-error{% endif %}">
+    <label class="form-check" for="{{ field.id_for_label }}">
+      {{ field }}
+      <span>{{ field.label }}{% if field.field.required %} <span class="form-required" aria-hidden="true">*</span>{% endif %}</span>
+    </label>
+    {% if field.help_text %}<p class="form-help">{{ field.help_text|safe }}</p>{% endif %}
+    {% for error in field.errors %}<p class="form-error">{{ error }}</p>{% endfor %}
+  </div>
+{% elif field.widget_type == "radioselect" %}
+  <fieldset class="form-field form-field--choice{% if field.errors %} has-error{% endif %}">
+    <legend class="form-label">{{ field.label }}{% if field.field.required %} <span class="form-required" aria-hidden="true">*</span>{% endif %}</legend>
+    {{ field }}
+    {% if field.help_text %}<p class="form-help">{{ field.help_text|safe }}</p>{% endif %}
+    {% for error in field.errors %}<p class="form-error">{{ error }}</p>{% endfor %}
+  </fieldset>
+{% else %}
+  <div class="form-field{% if field.errors %} has-error{% endif %}">
+    <label class="form-label" for="{{ field.id_for_label }}">
+      {{ field.label }}{% if field.field.required %} <span class="form-required" aria-hidden="true">*</span>{% endif %}
+    </label>
+    {{ field }}
+    {% if field.help_text %}<p class="form-help">{{ field.help_text|safe }}</p>{% endif %}
+    {% for error in field.errors %}<p class="form-error">{{ error }}</p>{% endfor %}
+  </div>
+{% endif %}

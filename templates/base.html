@@ -8,6 +8,7 @@
   <meta name="description" content="{% block description %}Новые автомобили в наличии: тест-драйв, бронирование онлайн и оценка вашего авто в трейд-ин.{% endblock %}">
   <link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
   <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="preload" as="image" href="{% static 'img/hero-cayenne.png' %}" fetchpriority="high">
   <script src="{% static 'js/main.js' %}" defer></script>
 </head>
 <body>
@@ -33,7 +34,7 @@
         <ul class="main-nav__list">
           <li>
             <a class="main-nav__link" href="{% url 'autosalon:catalog' %}"
-               {% if request.resolver_match.url_name == 'catalog' %}aria-current="page"{% endif %}>Каталог</a>
+               {% if request.resolver_match.url_name == 'catalog' or request.resolver_match.url_name == 'car_detail' %}aria-current="page"{% endif %}>Каталог</a>
           </li>
           <li>
             <a class="main-nav__link" href="{% url 'autosalon:test_drive' %}"
@@ -59,7 +60,16 @@
           <a class="header-side__phone" href="tel:+74950000000">+7 (495) 000-00-00</a>
           <span class="header-side__hours">Ежедневно, 09:00–21:00</span>
         </div>
-        <a class="btn btn--outline header-side__cta" href="{% url 'autosalon:register' %}">Регистрация</a>
+
+        <div class="header-side__auth">
+          {% if user.is_authenticated %}
+            <a class="btn btn--outline header-side__cta" href="{% url 'autosalon:account' %}">
+              {% if user.first_name %}{{ user.first_name }}{% else %}Кабинет{% endif %}
+            </a>
+          {% else %}
+            <a class="btn btn--outline header-side__cta" href="{% url 'autosalon:register' %}?next={{ request.get_full_path|urlencode }}">Регистрация</a>
+          {% endif %}
+        </div>
       </div>
     </div>
   </header>
@@ -83,6 +93,9 @@
         <ul class="site-footer__list">
           <li><a href="{% url 'autosalon:catalog' %}">Все автомобили</a></li>
           <li><a href="{% url 'autosalon:about' %}">О нас</a></li>
+          {% if user.is_authenticated %}
+            <li><a href="{% url 'autosalon:account_favorites' %}">Избранное</a></li>
+          {% endif %}
         </ul>
       </nav>
 
@@ -90,6 +103,8 @@
         <h2 class="site-footer__title">Сервисы</h2>
         <ul class="site-footer__list">
           <li><a href="{% url 'autosalon:test_drive' %}">Тест-драйв</a></li>
+          <li><a href="{% url 'autosalon:trade_in' %}">Трейд-ин</a></li>
+          <li><a href="{% url 'autosalon:reservation_lookup' %}">Бронирование по VIN</a></li>
           <li><a href="{% url 'autosalon:contacts' %}">Контакты</a></li>
         </ul>
       </nav>
@@ -98,6 +113,7 @@
         <h2 class="site-footer__title">Связаться</h2>
         <a class="site-footer__phone" href="tel:+74950000000">+7 (495) 000-00-00</a>
         <span class="site-footer__hours">Ежедневно, 09:00–21:00</span>
+        <p class="site-footer__address">Москва, ул. Автозаводская, 12</p>
       </div>
     </div>
 

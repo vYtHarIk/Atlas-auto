@@ -1,0 +1,46 @@
+{% load static humanize %}
+{% with car=config.primary_instance %}
+  <article class="car-card">
+    <div class="car-card__media">
+      <span class="badge">{{ config.status_label }}</span>
+      {% if user.is_authenticated %}
+        <form class="car-card__favorite" method="post" action="{% url 'autosalon:favorite_toggle' config.pk %}">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <button class="favorite-toggle{% if config.pk in favorite_ids %} is-active{% endif %}"
+                  type="submit"
+                  data-favorite
+                  data-url="{% url 'autosalon:favorite_toggle' config.pk %}"
+                  aria-pressed="{% if config.pk in favorite_ids %}true{% else %}false{% endif %}"
+                  aria-label="{% if config.pk in favorite_ids %}Убрать из избранного{% else %}Добавить в избранное{% endif %}">
+            <span aria-hidden="true">♥</span>
+          </button>
+        </form>
+      {% endif %}
+      <img class="car-card__image"
+           src="{% static config.model.image %}"
+           alt="{{ config.model.title }}{% if car %} — {{ car.color }}, вид сбоку{% endif %}"
+           width="800" height="400" loading="lazy">
+    </div>
+    <div class="car-card__body">
+      <h3 class="car-card__title">
+        <a href="{{ config.get_absolute_url }}">{{ config.model.title }}</a>
+      </h3>
+      <p class="car-card__specs">{{ config.specs }}</p>
+      {% if car %}
+        <p class="car-card__condition">{{ car.get_condition_display }} / {{ car.year }} / {{ car.color }}</p>
+      {% else %}
+        <p class="car-card__condition">Под заказ</p>
+      {% endif %}
+      <p class="car-card__price">{{ config.price|floatformat:0|intcomma }} ₽</p>
+      <div class="car-card__actions">
+        {% if car and car.is_available %}
+          <a class="btn btn--dark" href="{% url 'autosalon:reservation_create' car.pk %}">Забронировать</a>
+        {% else %}
+          <a class="btn btn--dark" href="{% url 'autosalon:test_drive' %}?car={{ config.pk }}">Записаться</a>
+        {% endif %}
+        <a class="link-muted" href="{{ config.get_absolute_url }}">Подробнее</a>
+      </div>
+    </div>
+  </article>
+{% endwith %}

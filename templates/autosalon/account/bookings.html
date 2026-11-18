@@ -1,0 +1,54 @@
+{% extends "autosalon/account/base_account.html" %}
+{% load humanize %}
+
+{% block title %}Мои тест-драйвы — АТЛАС АВТО{% endblock %}
+
+{% block account_content %}
+  <header class="account-head">
+    <p class="kicker">Личный кабинет</p>
+    <h1 class="account-head__title" id="account-title">Мои тест-драйвы</h1>
+    <p class="account-head__lead">Все записи и их статусы. Отменить будущую запись можно здесь.</p>
+  </header>
+
+  {% if bookings %}
+    <ul class="record-list">
+      {% for booking in bookings %}
+        <li class="record">
+          <div class="record__head">
+            <div>
+              <h2 class="record__title">{{ booking.test_car.model.title }}</h2>
+              <p class="record__meta">
+                {{ booking.booking_datetime|date:"d.m.Y, H:i" }} ·
+                {{ booking.test_car.state_number }} ·
+                стаж {{ booking.driving_experience_years }} лет
+              </p>
+            </div>
+            <span class="status status--{{ booking.status }}">{{ booking.get_status_display }}</span>
+          </div>
+
+          {% if booking.comment %}
+            <p class="record__comment">{{ booking.comment }}</p>
+          {% endif %}
+
+          <div class="record__footer">
+            <p class="record__meta">
+              Создана {{ booking.created_at|date:"d.m.Y" }}
+              {% if booking.manager %} · менеджер: {{ booking.manager.get_full_name|default:booking.manager.username }}{% endif %}
+            </p>
+            {% if booking.is_active and not booking.is_past %}
+              <form method="post" action="{% url 'autosalon:booking_cancel' booking.pk %}">
+                {% csrf_token %}
+                <button class="btn btn--outline btn--small" type="submit">Отменить запись</button>
+              </form>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="panel">
+      <p class="panel__empty">Вы ещё не записывались на тест-драйв.</p>
+      <a class="btn btn--primary" href="{% url 'autosalon:test_drive' %}">Записаться на тест-драйв</a>
+    </div>
+  {% endif %}
+{% endblock %}

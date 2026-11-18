@@ -1,0 +1,36 @@
+{% extends "autosalon/account/base_account.html" %}
+
+{% block title %}Профиль — АТЛАС АВТО{% endblock %}
+
+{% block account_content %}
+  <header class="account-head">
+    <p class="kicker">Личный кабинет</p>
+    <h1 class="account-head__title" id="account-title">Профиль</h1>
+    <p class="account-head__lead">Контактные данные нужны менеджеру для подтверждения записей.</p>
+  </header>
+
+  <div class="panel">
+    <form class="stack-form" method="post" data-validate>
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="form-errors" role="alert">{{ form.non_field_errors }}</div>
+      {% endif %}
+
+      <div class="stack-form__grid">
+        {% include "includes/field.html" with field=form.first_name %}
+        {% include "includes/field.html" with field=form.last_name %}
+      </div>
+      {% include "includes/field.html" with field=form.email %}
+      {% include "includes/field.html" with field=form.phone %}
+      {% include "includes/field.html" with field=form.driving_experience_years %}
+
+      <button class="btn btn--primary" type="submit">Сохранить изменения</button>
+    </form>
+  </div>
+
+  <div class="panel">
+    <h2 class="panel__title">Безопасность</h2>
+    <p class="panel__empty">Пароль можно изменить в отдельном разделе.</p>
+    <a class="btn btn--outline" href="{% url 'autosalon:account_password' %}">Сменить пароль</a>
+  </div>
+{% endblock %}

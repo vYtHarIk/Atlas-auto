@@ -1,27 +1,192 @@
 {% extends "base.html" %}
 {% load static humanize %}
 
-{% block title %}{{ page_title }}{% endblock %}
-{% block description %}{{ car.name }}: {{ car.specs }}, {{ car.condition }}. Цена {{ car.price|intcomma }} ₽.{% endblock %}
+{% block title %}{{ config.model.title }} {{ config.name }} — АТЛАС АВТО{% endblock %}
+{% block description %}{{ meta_description }}{% endblock %}
 
 {% block content %}
-  <section class="page-stub" aria-labelledby="car-title">
-    <div class="container page-stub__inner">
-      <p class="kicker">{{ car.status }}</p>
-      <h1 class="page-stub__title" id="car-title">{{ car.name }}</h1>
-      <p class="page-stub__lead">{{ car.specs }}. {{ car.condition }}. {{ car.price|intcomma }} ₽.</p>
+  <article class="car-detail">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Хлебные крошки">
+        <a href="{% url 'autosalon:home' %}">Главная</a>
+        <span aria-hidden="true">/</span>
+        <a href="{% url 'autosalon:catalog' %}">Каталог</a>
+        <span aria-hidden="true">/</span>
+        <span>{{ config.model.title }}</span>
+      </nav>
 
-      <img class="page-stub__image"
-           src="{% static car.image %}"
-           alt="{{ car.image_alt }}"
-           width="800" height="400">
+      <div class="car-detail__top">
+        <div class="car-detail__media">
+          <img class="car-detail__image"
+               src="{% static config.model.image %}"
+               alt="{{ config.model.title }}{% if car %} — {{ car.color }}, вид сбоку{% endif %}"
+               width="900" height="600">
+          {% if car %}
+            <p class="car-detail__color">Цвет: <strong>{{ car.color }}</strong></p>
+          {% endif %}
+        </div>
 
-      <p class="page-stub__note">Подробная карточка автомобиля с комплектацией появится на занятии 8.</p>
+        <div class="car-detail__info">
+          <p class="car-detail__status{% if car and car.is_available %} is-available{% endif %}">
+            {{ config.status_label }}
+          </p>
+          <h1 class="car-detail__title">{{ config.model.title }}</h1>
+          <p class="car-detail__subtitle">{{ config.name }} · {{ config.year }}</p>
 
-      <div class="page-stub__actions">
-        <a class="btn btn--primary" href="{% url 'autosalon:test_drive' %}">Записаться на тест-драйв</a>
-        <a class="btn btn--outline" href="{% url 'autosalon:catalog' %}">Вернуться в каталог</a>
+          <dl class="spec-list spec-list--compact">
+            <div><dt>Комплектация</dt><dd>{{ config.name }}</dd></div>
+            <div><dt>Двигатель</dt><dd>{{ config.engine_volume }} л · {{ config.power_hp }} л. с.</dd></div>
+            <div><dt>Коробка</dt><dd>{{ config.get_transmission_display }}</dd></div>
+            <div><dt>Привод</dt><dd>{{ config.get_drive_type_display }}</dd></div>
+            {% if car %}
+              <div><dt>VIN</dt><dd class="spec-list__vin">{{ car.vin }}</dd></div>
+              <div><dt>Год</dt><dd>{{ car.year }}</dd></div>
+              <div><dt>Состояние</dt><dd>{{ car.get_condition_display }}{% if car.mileage %}, {{ car.mileage|intcomma }} км{% endif %}</dd></div>
+            {% endif %}
+          </dl>
+
+          <p class="car-detail__price">{{ config.price|floatformat:0|intcomma }} ₽</p>
+
+          <div class="car-detail__actions">
+            {% if user.is_authenticated %}
+              <a class="btn btn--dark" href="{% url 'autosalon:test_drive' %}?car={{ config.pk }}">Записаться на тест-драйв</a>
+            {% else %}
+              <a class="btn btn--dark" href="{% url 'autosalon:login' %}?next={{ request.get_full_path|urlencode }}">Записаться на тест-драйв</a>
+            {% endif %}
+            {% if available_instance %}
+              <a class="btn btn--outline" href="{% url 'autosalon:reservation_create' available_instance.pk %}">Забронировать</a>
+            {% else %}
+              <a class="btn btn--outline" href="{% url 'autosalon:catalog' %}?availability=on_order">Автомобили в поставке</a>
+            {% endif %}
+            {% if user.is_authenticated %}
+              <form class="car-detail__favorite" method="post" action="{% url 'autosalon:favorite_toggle' config.pk %}">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                <button class="favorite-toggle favorite-toggle--wide{% if is_favorite %} is-active{% endif %}"
+                        type="submit" data-favorite
+                        data-url="{% url 'autosalon:favorite_toggle' config.pk %}"
+                        aria-pressed="{% if is_favorite %}true{% else %}false{% endif %}">
+                  <span aria-hidden="true">♥</span>
+                  <span data-favorite-label>{% if is_favorite %}В избранном{% else %}В избранное{% endif %}</span>
+                </button>
+              </form>
+            {% endif %}
+          </div>
+        </div>
       </div>
+
+      <div class="car-detail__body">
+        <section class="car-section" aria-labelledby="specs-title">
+          <h2 class="car-section__title" id="specs-title">Характеристики</h2>
+          <p class="car-section__lead">{{ config.model.description }}</p>
+
+          <div class="spec-columns">
+            <dl class="spec-list">
+              <div><dt>Марка</dt><dd>{{ config.model.brand }}</dd></div>
+              <div><dt>Модель</dt><dd>{{ config.model.name }}</dd></div>
+              <div><dt>Комплектация</dt><dd>{{ config.name }}</dd></div>
+              <div><dt>Модельный год</dt><dd>{{ config.year }}</dd></div>
+              <div><dt>Тип кузова</dt><dd>{{ config.model.get_body_type_display }}</dd></div>
+            </dl>
+            <dl class="spec-list">
+              <div><dt>Объём двигателя</dt><dd>{{ config.engine_volume }} л</dd></div>
+              <div><dt>Мощность</dt><dd>{{ config.power_hp }} л. с.</dd></div>
+              <div><dt>Коробка передач</dt><dd>{{ config.get_transmission_display }}</dd></div>
+              <div><dt>Привод</dt><dd>{{ config.get_drive_type_display }}</dd></div>
+              <div><dt>Базовая цена</dt><dd>{{ config.base_price|floatformat:0|intcomma }} ₽</dd></div>
+            </dl>
+          </div>
+
+          {% if options %}
+            <h3 class="car-section__subtitle">Оснащение</h3>
+            <ul class="option-list">
+              {% for link in options %}
+                <li class="option-list__item">
+                  <span>{{ link.option.name }}</span>
+                  <span class="option-list__price">
+                    {% if link.is_standard %}в базовой комплектации{% else %}+ {{ link.option.price|floatformat:0|intcomma }} ₽{% endif %}
+                  </span>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </section>
+
+        <section class="car-section" id="reviews" aria-labelledby="reviews-title">
+          <div class="car-section__head">
+            <h2 class="car-section__title" id="reviews-title">Отзывы</h2>
+            {% if average_rating %}
+              <p class="rating-summary">Средняя оценка: <strong>{{ average_rating }}</strong> из 5 · {{ reviews|length }} отзыв{{ reviews|length|pluralize:"а,ов" }}</p>
+            {% endif %}
+          </div>
+
+          {% if user.is_authenticated %}
+            <form class="review-form" method="post" action="{% url 'autosalon:review_create' config.pk %}" data-validate>
+              {% csrf_token %}
+              {% if review_form.non_field_errors %}
+                <div class="form-errors">{{ review_form.non_field_errors }}</div>
+              {% endif %}
+              <div class="review-form__rating">
+                {% include "includes/field.html" with field=review_form.rating %}
+              </div>
+              {% include "includes/field.html" with field=review_form.text %}
+              <button class="btn btn--dark" type="submit">Отправить отзыв</button>
+              <p class="form-help">Один отзыв на автомобиль. Повторная отправка обновит предыдущий.</p>
+            </form>
+          {% else %}
+            <p class="car-section__lead">
+              <a href="{% url 'autosalon:login' %}?next={{ request.get_full_path|urlencode }}">Войдите</a>,
+              чтобы оставить отзыв об автомобиле.
+            </p>
+          {% endif %}
+
+          <ul class="review-list">
+            {% for review in reviews %}
+              <li class="review">
+                <div class="review__head">
+                  <p class="review__author">{{ review.user.get_full_name|default:review.user.username }}</p>
+                  <p class="review__date">{{ review.created_at|date:"d.m.Y" }}</p>
+                </div>
+                <p class="review__rating" aria-label="Оценка {{ review.rating }} из 5">
+                  {% for star in "12345" %}<span class="{% if forloop.counter <= review.rating %}is-filled{% endif %}" aria-hidden="true">★</span>{% endfor %}
+                  <span class="visually-hidden">{{ review.rating }} из 5</span>
+                </p>
+                <p class="review__text">{{ review.text|linebreaksbr }}</p>
+              </li>
+            {% empty %}
+              <li class="empty-state">Отзывов пока нет. Станьте первым, кто поделится впечатлениями.</li>
+            {% endfor %}
+          </ul>
+        </section>
+      </div>
+
+      <section class="car-cta" aria-labelledby="car-cta-title">
+        <div>
+          <p class="kicker kicker--light">Познакомьтесь ближе</p>
+          <h2 class="car-cta__title" id="car-cta-title">Впечатления важнее слов.</h2>
+          <p class="car-cta__text">Запишитесь на тест-драйв {{ config.model.title }} — 30 минут за рулём помогут решить.</p>
+        </div>
+        <div class="car-cta__actions">
+          <a class="btn btn--primary" href="{% url 'autosalon:test_drive' %}?car={{ config.pk }}">Записаться на тест-драйв</a>
+          {% if available_instance %}
+            <a class="btn btn--outline btn--outline-light" href="{% url 'autosalon:reservation_create' available_instance.pk %}">Забронировать</a>
+          {% endif %}
+        </div>
+      </section>
+
+      {% if similar %}
+        <section class="similar" aria-labelledby="similar-title">
+          <div class="section-head">
+            <h2 class="section-head__title" id="similar-title">Похожие автомобили</h2>
+            <a class="link-arrow" href="{% url 'autosalon:catalog' %}">Весь каталог <span aria-hidden="true">→</span></a>
+          </div>
+          <ul class="car-grid">
+            {% for item in similar %}
+              <li>{% include "includes/car_card.html" with config=item %}</li>
+            {% endfor %}
+          </ul>
+        </section>
+      {% endif %}
     </div>
-  </section>
+  </article>
 {% endblock %}

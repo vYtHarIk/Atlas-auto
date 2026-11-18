@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Купить автомобиль — АТЛАС АВТО{% endblock %}
+{% block description %}Каталог новых автомобилей АТЛАС АВТО: фильтры по марке, кузову, цене и году. Тест-драйв и бронирование онлайн.{% endblock %}
+
+{% block content %}
+  <section class="page-head" aria-labelledby="catalog-title">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Хлебные крошки">
+        <a href="{% url 'autosalon:home' %}">Главная</a>
+        <span aria-hidden="true">/</span>
+        <span>Каталог</span>
+      </nav>
+      <h1 class="page-head__title" id="catalog-title">Купить автомобиль</h1>
+      <!-- <p class="page-head__lead">Новые автомобили в наличии и под заказ. Забронируйте онлайн или запишитесь на тест-драйв.</p> -->
+    </div>
+  </section>
+
+  <section class="catalog" aria-label="Каталог автомобилей">
+    <div class="container catalog__layout">
+      <aside class="filter-panel" aria-labelledby="filters-title" data-filter-panel>
+        <div class="filter-panel__head">
+          <h2 class="filter-panel__title" id="filters-title">Фильтры</h2>
+          <button class="filter-panel__toggle" type="button" data-filter-toggle
+                  aria-expanded="false" aria-controls="catalog-filters">
+            <span data-filter-toggle-label>Показать</span>
+          </button>
+        </div>
+
+        <form class="filter-form" id="catalog-filters" method="get" action="{% url 'autosalon:catalog' %}">
+          <div class="filter-group">
+            <label class="filter-label" for="filter-q">Поиск</label>
+            <input class="filter-input" id="filter-q" type="search" name="q"
+                   value="{{ selected.q }}" placeholder="Марка или модель">
+          </div>
+
+          <fieldset class="filter-group">
+            <legend class="filter-label">Наличие</legend>
+            <div class="filter-chips">
+              {% for value, label in availability_choices %}
+                <label class="filter-chip">
+                  <input type="radio" name="availability" value="{{ value }}"
+                         {% if selected.availability == value %}checked{% endif %}>
+                  <span>{{ label }}</span>
+                </label>
+              {% endfor %}
+            </div>
+          </fieldset>
+
+          <fieldset class="filter-group">
+            <legend class="filter-label">Состояние</legend>
+            <div class="filter-chips">
+              {% for value, label in condition_choices %}
+                <label class="filter-chip">
+                  <input type="radio" name="condition" value="{{ value }}"
+                         {% if selected.condition == value %}checked{% endif %}>
+                  <span>{{ label }}</span>
+                </label>
+              {% endfor %}
+            </div>
+          </fieldset>
+
+          <fieldset class="filter-group">
+            <legend class="filter-label">Тип кузова</legend>
+            <div class="filter-chips">
+              <label class="filter-chip">
+                <input type="radio" name="body_type" value=""
+                       {% if not selected.body_type %}checked{% endif %}>
+                <span>Все</span>
+              </label>
+              {% for value, label in body_types %}
+                <label class="filter-chip">
+                  <input type="radio" name="body_type" value="{{ value }}"
+                         {% if selected.body_type == value %}checked{% endif %}>
+                  <span>{{ label }}</span>
+                </label>
+              {% endfor %}
+            </div>
+          </fieldset>
+
+          <div class="filter-group">
+            <label class="filter-label" for="filter-brand">Марка</label>
+            <select class="filter-input" id="filter-brand" name="brand">
+              <option value="">Все марки</option>
+              {% for brand in brands %}
+                <option value="{{ brand }}" {% if selected.brand == brand %}selected{% endif %}>{{ brand }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <fieldset class="filter-group">
+            <legend class="filter-label">Цена, ₽</legend>
+            <div class="filter-range">
+              <input class="filter-input" type="number" name="price_min" min="0" step="100000"
+                     value="{{ selected.price_min }}" placeholder="от" aria-label="Цена от">
+              <span aria-hidden="true">—</span>
+              <input class="filter-input" type="number" name="price_max" min="0" step="100000"
+                     value="{{ selected.price_max }}" placeholder="до" aria-label="Цена до">
+            </div>
+          </fieldset>
+
+          <fieldset class="filter-group">
+            <legend class="filter-label">Год выпуска</legend>
+            <div class="filter-range">
+              <input class="filter-input" type="number" name="year_min" min="1950" max="2100"
+                     value="{{ selected.year_min }}" placeholder="от" aria-label="Год от">
+              <span aria-hidden="true">—</span>
+              <input class="filter-input" type="number" name="year_max" min="1950" max="2100"
+                     value="{{ selected.year_max }}" placeholder="до" aria-label="Год до">
+            </div>
+          </fieldset>
+
+          <p class="filter-panel__count">Подобрано: {{ total }} {{ total|pluralize:"автомобиль,автомобиля,автомобилей" }}</p>
+
+          <button class="btn btn--primary btn--block" type="submit">Применить</button>
+          <a class="btn btn--outline btn--block filter-reset" href="{% url 'autosalon:catalog' %}">Сбросить</a>
+        </form>
+      </aside>
+
+      <div class="catalog__content">
+        <!-- <div class="catalog__toolbar">
+          <p class="catalog__count">Найдено: <strong>{{ total }}</strong></p>
+          <div class="catalog__sort">
+            <label class="visually-hidden" for="sort">Сортировка</label>
+            <select class="filter-input" id="sort" name="sort" form="catalog-filters" data-autosubmit>
+              {% for value, label in sort_choices %}
+                <option value="{{ value }}" {% if selected.sort == value %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div> -->
+
+        <ul class="car-grid car-grid--catalog">
+          {% for config in configs %}
+            <li>{% include "includes/car_card.html" with config=config %}</li>
+          {% empty %}
+            <li class="empty-state empty-state--wide">
+              <h2 class="empty-state__title">Ничего не нашлось</h2>
+              <p>Попробуйте изменить фильтры или <a href="{% url 'autosalon:catalog' %}">сбросить их</a>.</p>
+            </li>
+          {% endfor %}
+        </ul>
+
+        {% if page_obj.paginator.num_pages > 1 %}
+          <nav class="pagination" aria-label="Страницы каталога">
+            {% if page_obj.has_previous %}
+              <a class="pagination__link" href="?{{ query_string }}{% if query_string %}&amp;{% endif %}page={{ page_obj.previous_page_number }}">← Назад</a>
+            {% endif %}
+            {% for number in page_obj.paginator.page_range %}
+              {% if number == page_obj.number %}
+                <span class="pagination__link is-active" aria-current="page">{{ number }}</span>
+              {% else %}
+                <a class="pagination__link" href="?{{ query_string }}{% if query_string %}&amp;{% endif %}page={{ number }}">{{ number }}</a>
+              {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+              <a class="pagination__link" href="?{{ query_string }}{% if query_string %}&amp;{% endif %}page={{ page_obj.next_page_number }}">Вперёд →</a>
+            {% endif %}
+          </nav>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+{% endblock %}

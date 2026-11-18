@@ -1,0 +1,116 @@
+{% extends "autosalon/account/base_account.html" %}
+{% load humanize %}
+
+{% block title %}Личный кабинет — АТЛАС АВТО{% endblock %}
+
+{% block account_content %}
+  <header class="account-head">
+    <p class="kicker">Личный кабинет</p>
+    <h1 class="account-head__title" id="account-title">Здравствуйте, {{ profile.display_name }}!</h1>
+    <p class="account-head__lead">Здесь собраны ваши тест-драйвы, брони и заявки.</p>
+  </header>
+
+  <div class="stats-grid">
+    <a class="stat-card" href="{% url 'autosalon:account_bookings' %}">
+      <span class="stat-card__value">{{ bookings_count }}</span>
+      <span class="stat-card__label">записей на тест-драйв</span>
+    </a>
+    <a class="stat-card" href="{% url 'autosalon:account_reservations' %}">
+      <span class="stat-card__value">{{ reservations_count }}</span>
+      <span class="stat-card__label">активных брон{{ reservations_count|pluralize:"ь,и,ей" }}</span>
+    </a>
+    <a class="stat-card" href="{% url 'autosalon:account_favorites' %}">
+      <span class="stat-card__value">{{ favorites_count }}</span>
+      <span class="stat-card__label">в избранном</span>
+    </a>
+    <div class="stat-card stat-card--static">
+      <span class="stat-card__value">{{ reviews_count }}</span>
+      <span class="stat-card__label">отзыв{{ reviews_count|pluralize:" ,а,ов" }}</span>
+    </div>
+  </div>
+
+  <div class="account-grid">
+    <section class="panel" aria-labelledby="upcoming-title">
+      <div class="panel__head">
+        <h2 class="panel__title" id="upcoming-title">Ближайшие тест-драйвы</h2>
+        <a class="link-muted" href="{% url 'autosalon:account_bookings' %}">Все записи</a>
+      </div>
+      {% if upcoming_bookings %}
+        <ul class="compact-list">
+          {% for booking in upcoming_bookings %}
+            <li class="compact-list__item">
+              <div>
+                <p class="compact-list__title">{{ booking.test_car.model.title }}</p>
+                <p class="compact-list__meta">{{ booking.booking_datetime|date:"d.m.Y, H:i" }} · {{ booking.test_car.state_number }}</p>
+              </div>
+              <span class="status status--{{ booking.status }}">{{ booking.get_status_display }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="panel__empty">Записей пока нет. <a href="{% url 'autosalon:catalog' %}">Выберите автомобиль</a> и запишитесь на тест-драйв.</p>
+      {% endif %}
+    </section>
+
+    <section class="panel" aria-labelledby="reservations-title">
+      <div class="panel__head">
+        <h2 class="panel__title" id="reservations-title">Активные брони</h2>
+        <a class="link-muted" href="{% url 'autosalon:account_reservations' %}">Все брони</a>
+      </div>
+      {% if active_reservations %}
+        <ul class="compact-list">
+          {% for reservation in active_reservations %}
+            <li class="compact-list__item">
+              <div>
+                <p class="compact-list__title">{{ reservation.car_instance.configuration.model.title }}</p>
+                <p class="compact-list__meta">VIN {{ reservation.car_instance.vin }} · до {{ reservation.expires_at|date:"d.m.Y" }}</p>
+              </div>
+              <span class="status status--confirmed">Активна</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="panel__empty">Активных брон нет. <a href="{% url 'autosalon:catalog' %}">Выберите автомобиль</a> и забронируйте его онлайн.</p>
+      {% endif %}
+    </section>
+
+    <section class="panel" aria-labelledby="trade-in-title">
+      <div class="panel__head">
+        <h2 class="panel__title" id="trade-in-title">Последняя заявка трейд-ин</h2>
+        <a class="link-muted" href="{% url 'autosalon:account_trade_ins' %}">Все заявки</a>
+      </div>
+      {% if latest_trade_in %}
+        <div class="trade-in-summary">
+          <div>
+            <p class="compact-list__title">{{ latest_trade_in.brand }} {{ latest_trade_in.model }}, {{ latest_trade_in.year }}</p>
+            <p class="compact-list__meta">{{ latest_trade_in.mileage|intcomma }} км · {{ latest_trade_in.created_at|date:"d.m.Y" }}</p>
+          </div>
+          <div class="trade-in-summary__price">
+            <span>Предварительная оценка</span>
+            <strong>{{ latest_trade_in.estimated_price|floatformat:0|intcomma }} ₽</strong>
+          </div>
+        </div>
+      {% else %}
+        <p class="panel__empty">Заявок пока нет. <a href="{% url 'autosalon:trade_in' %}">Оцените свой автомобиль</a> за пару минут.</p>
+      {% endif %}
+    </section>
+
+    <section class="panel panel--accent" aria-labelledby="shortcuts-title">
+      <h2 class="panel__title" id="shortcuts-title">Быстрые действия</h2>
+      <div class="shortcut-list">
+        <a class="shortcut" href="{% url 'autosalon:catalog' %}">
+          <span class="shortcut__title">Открыть каталог</span>
+          <span class="shortcut__text">Все автомобили в наличии и под заказ</span>
+        </a>
+        <a class="shortcut" href="{% url 'autosalon:test_drive' %}">
+          <span class="shortcut__title">Записаться на тест-драйв</span>
+          <span class="shortcut__text">Выберите модель, дату и время</span>
+        </a>
+        <a class="shortcut" href="{% url 'autosalon:reservation_lookup' %}">
+          <span class="shortcut__title">Бронь по VIN</span>
+          <span class="shortcut__text">Проверить наличие конкретного автомобиля</span>
+        </a>
+      </div>
+    </section>
+  </div>
+{% endblock %}

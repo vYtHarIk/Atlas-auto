@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Трейд-ин — оценка автомобиля | АТЛАС АВТО{% endblock %}
+{% block description %}Оцените свой автомобиль и обменяйте его на новый с доплатой. Загрузите фотографии, получите предварительную оценку онлайн.{% endblock %}
+
+{% block content %}
+  <section class="form-page" aria-labelledby="trade-in-title">
+    <img class="form-page__bg" src="{% static 'img/hero-cayenne.png' %}" alt="" width="1600" height="900" aria-hidden="true">
+    <div class="container form-page__inner">
+      <div class="form-card">
+        <h1 class="form-card__title" id="trade-in-title">Оценка вашего автомобиля</h1>
+        <p class="form-card__lead">{{ page_lead }}</p>
+
+        <form class="form-card__form" method="post" enctype="multipart/form-data" data-validate>
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+            <div class="form-errors" role="alert">{{ form.non_field_errors }}</div>
+          {% endif %}
+
+          {% include "includes/field.html" with field=form.brand %}
+          {% include "includes/field.html" with field=form.model %}
+          {% include "includes/field.html" with field=form.year %}
+          {% include "includes/field.html" with field=form.mileage %}
+          {% include "includes/field.html" with field=form.photos %}
+          {% include "includes/field.html" with field=form.comment %}
+
+          <div class="form-card__actions">
+            <button class="btn btn--primary" type="submit">Оценить</button>
+            <a class="link-muted1" href="{% url 'autosalon:home' %}">Отмена</a>
+          </div>
+
+          <p class="form-card__note">
+            Предварительная оценка формируется автоматически по году и пробегу.
+            Финальную стоимость менеджер подтвердит после осмотра.
+          </p>
+        </form>
+      </div>
+    </div>
+  </section>
+{% endblock %}

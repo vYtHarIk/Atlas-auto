@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}О нас — АТЛАС АВТО{% endblock %}
+{% block description %}АТЛАС АВТО — автосалон с 2012 года: новые автомобили, тест-драйвы, трейд-ин и персональный сервис.{% endblock %}
+
+{% block content %}
+  <section class="page-section" aria-labelledby="about-title">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Хлебные крошки">
+        <a href="{% url 'autosalon:home' %}">Главная</a>
+        <span aria-hidden="true">/</span>
+        <span>О нас</span>
+      </nav>
+      <h1 class="page-head__title" id="about-title">Автомобили с характером</h1>
+      <p class="page-head__lead">
+        АТЛАС АВТО — салон, где покупка автомобиля начинается не с прайса,
+        а со знакомства. Мы даём время, пространство и 30 минут за рулём.
+      </p>
+
+      <div class="about-hero">
+        <img class="about-hero__image"
+             src="{% static 'img/hero-cayenne.png' %}"
+             alt="Porsche Cayenne в шоуруме АТЛАС АВТО" width="1600" height="700">
+      </div>
+
+      <div class="stats-grid stats-grid--wide">
+        <div class="stat-card stat-card--static">
+          <span class="stat-card__value">14</span>
+          <span class="stat-card__label">лет на рынке</span>
+        </div>
+        <div class="stat-card stat-card--static">
+          <span class="stat-card__value">3 200+</span>
+          <span class="stat-card__label">проданных автомобилей</span>
+        </div>
+        <div class="stat-card stat-card--static">
+          <span class="stat-card__value">4,9</span>
+          <span class="stat-card__label">средняя оценка клиентов</span>
+        </div>
+        <div class="stat-card stat-card--static">
+          <span class="stat-card__value">30</span>
+          <span class="stat-card__label">минут на тест-драйв</span>
+        </div>
+      </div>
+
+      <div class="text-columns">
+        <section aria-labelledby="about-story">
+          <h2 class="page-section__subtitle" id="about-story">Наша история</h2>
+          <p>
+            Салон открылся в 2012 году с небольшой площадки на Автозаводской.
+            Сегодня АТЛАС АВТО — это шоурум с автомобилями Porsche,
+            Mercedes-Benz и BMW, собственный отдел трейд-ин и команда
+            персональных менеджеров.
+          </p>
+          <p>
+            Мы принципиально не продаём «из-под стола»: каждая машина имеет
+            прозрачную историю, VIN и фиксированную цену. Бронь оформляется
+            онлайн и действует пять дней — чтобы решение было спокойным.
+          </p>
+        </section>
+        <section aria-labelledby="about-values">
+          <h2 class="page-section__subtitle" id="about-values">Наши принципы</h2>
+          <ul class="check-list">
+            <li>Честная цена и прозрачная история автомобиля.</li>
+            <li>Тест-драйв без давления и навязчивых звонков.</li>
+            <li>Персональный менеджер на каждом этапе сделки.</li>
+            <li>Трейд-ин с предварительной оценкой онлайн.</li>
+          </ul>
+        </section>
+      </div>
+
+      <div class="page-cta">
+        <div>
+          <h2 class="page-cta__title">Приезжайте знакомиться</h2>
+          <p class="page-cta__text">Шоурум открыт ежедневно с 09:00 до 21:00. Запись на тест-драйв — онлайн.</p>
+        </div>
+        <div class="page-cta__actions">
+          <a class="btn btn--primary" href="{% url 'autosalon:test_drive' %}">Записаться на тест-драйв</a>
+          <a class="btn btn--outline" href="{% url 'autosalon:contacts' %}">Контакты</a>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

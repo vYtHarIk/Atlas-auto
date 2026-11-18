@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Контакты — АТЛАС АВТО{% endblock %}
+{% block description %}Адрес шоурума АТЛАС АВТО в Москве, телефон, часы работы и реквизиты для связи.{% endblock %}
+
+{% block content %}
+  <section class="page-section" aria-labelledby="contacts-title">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Хлебные крошки">
+        <a href="{% url 'autosalon:home' %}">Главная</a>
+        <span aria-hidden="true">/</span>
+        <span>Контакты</span>
+      </nav>
+      <h1 class="page-head__title" id="contacts-title">Контакты</h1>
+      <p class="page-head__lead">Приезжайте в шоурум или свяжитесь удобным способом — ответим в рабочее время.</p>
+
+      <div class="contact-layout">
+        <div class="contact-card">
+          <h2 class="contact-card__title">Шоурум</h2>
+          <dl class="contact-list">
+            <div>
+              <dt>Адрес</dt>
+              <dd>Москва, ул. Автозаводская, 12<br>1-й этаж, вход с набережной</dd>
+            </div>
+            <div>
+              <dt>Телефон</dt>
+              <dd><a href="tel:+74950000000">+7 (495) 000-00-00</a></dd>
+            </div>
+            <div>
+              <dt>E-mail</dt>
+              <dd><a href="mailto:info@atlas-auto.ru">info@atlas-auto.ru</a></dd>
+            </div>
+            <div>
+              <dt>Часы работы</dt>
+              <dd>Ежедневно, 09:00–21:00<br>Тест-драйвы — до 20:00</dd>
+            </div>
+            <div>
+              <dt>Парковка</dt>
+              <dd>Бесплатно для клиентов, въезд с ул. Автозаводской</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="contact-card contact-card--map" aria-label="Схема проезда">
+          <div class="map-placeholder">
+            <p class="map-placeholder__label">Москва</p>
+            <p class="map-placeholder__title">ул. Автозаводская, 12</p>
+            <p class="map-placeholder__text">5 минут от метро «Автозаводская», выход № 2.</p>
+            <a class="btn btn--outline" href="https://yandex.ru/maps/?text=Москва,%20Автозаводская%2012" target="_blank" rel="noopener">Открыть на карте</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <article class="info-card">
+          <h2 class="info-card__title">Отдел продаж</h2>
+          <p><a href="tel:+74950000001">+7 (495) 000-00-01</a><br>Новые автомобили и брони</p>
+        </article>
+        <article class="info-card">
+          <h2 class="info-card__title">Трейд-ин</h2>
+          <p><a href="tel:+74950000002">+7 (495) 000-00-02</a><br>Оценка и обмен автомобиля</p>
+        </article>
+        <article class="info-card">
+          <h2 class="info-card__title">Сервис</h2>
+          <p><a href="tel:+74950000003">+7 (495) 000-00-03</a><br>Техническое обслуживание</p>
+        </article>
+      </div>
+
+      <div class="page-cta">
+        <div>
+          <h2 class="page-cta__title">Хотите приехать на тест-драйв?</h2>
+          <p class="page-cta__text">Выберите автомобиль и удобное время — менеджер подтвердит запись.</p>
+        </div>
+        <div class="page-cta__actions">
+          <a class="btn btn--primary" href="{% url 'autosalon:test_drive' %}">Записаться</a>
+          <a class="btn btn--outline" href="{% url 'autosalon:catalog' %}">Каталог</a>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

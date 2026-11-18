@@ -1,0 +1,56 @@
+{% extends "autosalon/account/base_account.html" %}
+{% load humanize %}
+
+{% block title %}Мои заявки трейд-ин — АТЛАС АВТО{% endblock %}
+
+{% block account_content %}
+  <header class="account-head">
+    <p class="kicker">Личный кабинет</p>
+    <h1 class="account-head__title" id="account-title">Заявки трейд-ин</h1>
+    <p class="account-head__lead">Предварительные оценки ваших автомобилей и статусы заявок.</p>
+  </header>
+
+  {% if trade_ins %}
+    <ul class="record-list">
+      {% for trade_in in trade_ins %}
+        <li class="record">
+          <div class="record__head">
+            <div>
+              <h2 class="record__title">{{ trade_in.brand }} {{ trade_in.model }}, {{ trade_in.year }}</h2>
+              <p class="record__meta">{{ trade_in.mileage|intcomma }} км · заявка №{{ trade_in.pk }} от {{ trade_in.created_at|date:"d.m.Y" }}</p>
+            </div>
+            <span class="status status--{{ trade_in.status }}">{{ trade_in.get_status_display }}</span>
+          </div>
+
+          {% if trade_in.comment %}
+            <p class="record__comment">{{ trade_in.comment }}</p>
+          {% endif %}
+
+          {% with photos=trade_in.photos.all %}
+            {% if photos %}
+              <ul class="photo-list" aria-label="Фотографии автомобиля">
+                {% for photo in photos %}
+                  <li>
+                    <a href="{{ photo.image.url }}" target="_blank" rel="noopener">
+                      <img src="{{ photo.image.url }}" alt="Фотография {{ trade_in.brand }} {{ trade_in.model }}" width="120" height="90" loading="lazy">
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          {% endwith %}
+
+          <div class="record__footer">
+            <p class="record__price">Оценка: <strong>{{ trade_in.estimated_price|floatformat:0|intcomma }} ₽</strong></p>
+            <p class="record__meta">Менеджер свяжется с вами для осмотра.</p>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="panel">
+      <p class="panel__empty">Заявок пока нет. Оценим ваш автомобиль за пару минут.</p>
+      <a class="btn btn--primary" href="{% url 'autosalon:trade_in' %}">Оценить автомобиль</a>
+    </div>
+  {% endif %}
+{% endblock %}

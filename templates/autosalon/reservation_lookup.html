@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Бронирование по VIN — АТЛАС АВТО{% endblock %}
+{% block description %}Проверьте наличие автомобиля по VIN и забронируйте его онлайн в автосалоне АТЛАС АВТО.{% endblock %}
+
+{% block content %}
+  <section class="page-section" aria-labelledby="vin-title">
+    <div class="container page-section__narrow">
+      <nav class="breadcrumbs" aria-label="Хлебные крошки">
+        <a href="{% url 'autosalon:home' %}">Главная</a>
+        <span aria-hidden="true">/</span>
+        <span>Бронирование по VIN</span>
+      </nav>
+      <h1 class="page-head__title" id="vin-title">Бронирование по VIN</h1>
+      <p class="page-head__lead">
+        Введите 17-символьный VIN автомобиля из карточки — мы проверим наличие
+        и предложим оформить бронь.
+      </p>
+
+      <div class="panel">
+        <form class="panel__form" method="post" data-validate>
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+            <div class="form-errors" role="alert">{{ form.non_field_errors }}</div>
+          {% endif %}
+          {% include "includes/field.html" with field=form.vin %}
+          <button class="btn btn--primary" type="submit">Проверить VIN</button>
+        </form>
+      </div>
+
+      {% if found %}
+        <div class="notice notice--warning" role="status">
+          <h2 class="notice__title">Автомобиль найден, но уже недоступен</h2>
+          <p>
+            {{ found.configuration.model.title }}, VIN {{ found.vin }} —
+            статус «{{ found.get_status_display }}». Посмотрите
+            <a href="{% url 'autosalon:catalog' %}">другие автомобили в каталоге</a>
+            или запишитесь на тест-драйв.
+          </p>
+        </div>
+      {% endif %}
+
+      <div class="info-grid">
+        <article class="info-card">
+          <h2 class="info-card__title">Что даёт бронь</h2>
+          <p>Автомобиль снимается с продажи на 5 дней, VIN закрепляется за вами.</p>
+        </article>
+        <article class="info-card">
+          <h2 class="info-card__title">Сколько стоит</h2>
+          <p>Задаток от 50 000 ₽. Сумма входит в стоимость автомобиля.</p>
+        </article>
+        <article class="info-card">
+          <h2 class="info-card__title">Как отменить</h2>
+          <p>В личном кабинете, раздел «Мои брони». Автомобиль снова станет доступен.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+{% endblock %}

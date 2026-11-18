@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Запись на тест-драйв — АТЛАС АВТО{% endblock %}
+{% block description %}Запишитесь на тест-драйв автомобиля в АТЛАС АВТО: выберите модель, дату и удобное время. Подтвердим запись звонком.{% endblock %}
+
+{% block content %}
+  <section class="form-page" aria-labelledby="test-drive-title">
+    <img class="form-page__bg" src="{% static 'img/hero-cayenne.png' %}" alt="" width="1600" height="900" aria-hidden="true">
+    <div class="container form-page__inner">
+      <div class="form-card">
+        <h1 class="form-card__title" id="test-drive-title">Запись на тест-драйв</h1>
+
+        {% if config %}
+          <div class="form-card__summary">
+            <p><span>Автомобиль:</span> <strong>{{ config.model.title }}</strong></p>
+            <p><span>Комплектация:</span> {{ config.name }} · {{ config.specs }}</p>
+          </div>
+        {% endif %}
+
+        <form class="form-card__form" method="post" data-validate>
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+            <div class="form-errors" role="alert">{{ form.non_field_errors }}</div>
+          {% endif %}
+
+          {% include "includes/field.html" with field=form.contact_name %}
+          {% include "includes/field.html" with field=form.contact_phone %}
+          {% include "includes/field.html" with field=form.test_car %}
+          {% include "includes/field.html" with field=form.booking_datetime %}
+          {% include "includes/field.html" with field=form.driving_experience_years %}
+          {% include "includes/field.html" with field=form.comment %}
+
+          <div class="form-card__actions">
+            <button class="btn btn--primary" type="submit">Записаться</button>
+            <a class="link-muted1" href="{% url 'autosalon:home' %}">Отмена</a>
+          </div>
+
+          <p class="form-card__note">
+            Нажимая кнопку «Записаться», вы соглашаетесь с
+            <a href="{% url 'autosalon:privacy' %}">политикой конфиденциальности</a>
+            и обработкой персональных данных.
+          </p>
+        </form>
+      </div>
+    </div>
+  </section>
+{% endblock %}

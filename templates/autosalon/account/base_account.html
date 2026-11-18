@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section class="account" aria-labelledby="account-title">
+    <div class="container account__layout">
+      <aside class="account-sidebar" aria-label="Разделы личного кабинета">
+        <div class="account-sidebar__user">
+          <span class="account-sidebar__avatar" aria-hidden="true">
+            {{ user.first_name|first|default:user.username|first|upper }}
+          </span>
+          <div>
+            <p class="account-sidebar__name">{{ user.get_full_name|default:user.username }}</p>
+            <p class="account-sidebar__email">{{ user.email }}</p>
+          </div>
+        </div>
+
+        <nav class="account-nav" aria-label="Навигация по кабинету">
+          <a class="account-nav__link" href="{% url 'autosalon:account' %}"
+             {% if request.resolver_match.url_name == 'account' %}aria-current="page"{% endif %}>Обзор</a>
+          <a class="account-nav__link" href="{% url 'autosalon:account_bookings' %}"
+             {% if request.resolver_match.url_name == 'account_bookings' %}aria-current="page"{% endif %}>Мои тест-драйвы</a>
+          <a class="account-nav__link" href="{% url 'autosalon:account_reservations' %}"
+             {% if request.resolver_match.url_name == 'account_reservations' %}aria-current="page"{% endif %}>Мои брони</a>
+          <a class="account-nav__link" href="{% url 'autosalon:account_trade_ins' %}"
+             {% if request.resolver_match.url_name == 'account_trade_ins' %}aria-current="page"{% endif %}>Трейд-ин</a>
+          <a class="account-nav__link" href="{% url 'autosalon:account_favorites' %}"
+             {% if request.resolver_match.url_name == 'account_favorites' %}aria-current="page"{% endif %}>Избранное</a>
+          <a class="account-nav__link" href="{% url 'autosalon:account_profile' %}"
+             {% if request.resolver_match.url_name == 'account_profile' %}aria-current="page"{% endif %}>Профиль</a>
+          <a class="account-nav__link" href="{% url 'autosalon:account_password' %}"
+             {% if request.resolver_match.url_name == 'account_password' %}aria-current="page"{% endif %}>Сменить пароль</a>
+        </nav>
+
+        <form class="account-sidebar__logout" method="post" action="{% url 'autosalon:logout' %}">
+          {% csrf_token %}
+          <button class="link-muted" type="submit">Выйти из аккаунта</button>
+        </form>
+      </aside>
+
+      <div class="account-main">
+        {% block account_content %}{% endblock %}
+      </div>
+    </div>
+  </section>
+{% endblock %}

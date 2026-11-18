@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Вход в личный кабинет — АТЛАС АВТО{% endblock %}
+{% block description %}Войдите в личный кабинет АТЛАС АВТО, чтобы управлять тест-драйвами, бронями и заявками трейд-ин.{% endblock %}
+
+{% block content %}
+  <section class="auth-page" aria-labelledby="login-title">
+    <div class="container auth-page__inner">
+      <div class="auth-card">
+        <p class="kicker">Личный кабинет</p>
+        <h1 class="auth-card__title" id="login-title">Вход</h1>
+        <p class="auth-card__lead">Управляйте тест-драйвами, бронями и заявками в одном месте.</p>
+
+        <form class="auth-form" method="post" data-validate>
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+            <div class="form-errors" role="alert">{{ form.non_field_errors }}</div>
+          {% endif %}
+          {% include "includes/field.html" with field=form.username %}
+          {% include "includes/field.html" with field=form.password %}
+          <input type="hidden" name="next" value="{{ next }}">
+          <button class="btn btn--primary btn--block" type="submit">Войти</button>
+        </form>
+
+        <p class="auth-card__switch">
+          Нет аккаунта? <a href="{% url 'autosalon:register' %}">Зарегистрироваться</a>
+        </p>
+      </div>
+
+      <aside class="auth-aside" aria-label="Возможности кабинета">
+        <h2 class="auth-aside__title">Всё под рукой</h2>
+        <ul class="auth-aside__list">
+          <li>Записи на тест-драйв и их статусы.</li>
+          <li>Активные брони с конкретным VIN.</li>
+          <li>Заявки трейд-ин с предварительной оценкой.</li>
+          <li>Избранные автомобили и отзывы.</li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+{% endblock %}
